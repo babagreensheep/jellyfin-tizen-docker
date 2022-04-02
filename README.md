@@ -16,15 +16,15 @@ docker build -t jellyfin .
 ```
 docker run -it --rm jellyfin
 ```
-3. Deploy to TV ()
-    1. Run TV.
-    2. Activate Developer Mode on TV (<a href="https://developer.samsung.com/tv/develop/getting-started/using-sdk/tv-device">https://developer.samsung.com/tv/develop/getting-started/using-sdk/tv-device</a>).
-    3. Connect to TV with Device Manager from Tizen Studio. Or with sdb.
+3. Deploy to TV (adapted from official tizen)
+    - Run TV.
+    - Activate Developer Mode on TV (<a href="https://developer.samsung.com/tv/develop/getting-started/using-sdk/tv-device">https://developer.samsung.com/tv/develop/getting-started/using-sdk/tv-device</a>).
+    - Connect to TV with Device Manager from Tizen Studio. Or with sdb.
     ```sh
     sdb connect YOUR_TV_IP
     ```
-    4. `Permit to install applications` on your TV
-    5. Install package.
+    - `Permit to install applications` on your TV
+    - Install package.
     ```sh
     tizen install -n Jellyfin.wgt -t UE65NU7400
     ```
