@@ -61,16 +61,9 @@ RUN npm ci --no-audit
 
 RUN tizen build-web -e ".*" -e gulpfile.js -e README.md -e "node_modules/*" -e "package*.json" -e "yarn.lock"
 
-RUN touch expect.sh
-RUN chmod a+x expect.sh
-RUN printf '%s\n' "#!/usr/bin/expect -f" >> expect.sh
-RUN printf '%s\n' "set timeout -1" >> expect.sh
-RUN printf '%s\n' "spawn tizen package -t wgt -o . -- .buildResult" >> expect.sh
-RUN printf '%s\n' "expect \"Author password: \"" >> expect.sh
-RUN printf '%s\n' "send -- \"1234\r\"" >> expect.sh
-RUN printf '%s\n' "expect \"Yes: (Y), No: (N) ?\"" >> expect.sh
-RUN printf '%s\n' "send -- \"Y\r\"" >> expect.sh
-RUN printf '%s\n' "expect eof" >> expect.sh
+COPY --chown=jellyfin ./expect.sh /home/jellyfin/jellyfin-tizen/expect.sh
+RUN chmod a+x /home/jellyfin/jellyfin-tizen/expect.sh
+
 RUN ./expect.sh
 
 ENV TV_IP=127.0.0.1
