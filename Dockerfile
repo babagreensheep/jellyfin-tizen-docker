@@ -1,4 +1,4 @@
-FROM ubuntu:21.10
+FROM ubuntu:latest
 
 RUN apt-get update; apt-get -y upgrade; apt-get clean
 RUN DEBIAN_FRONTEND=noninteractive TZ=Singapore apt-get -y install tzdata
