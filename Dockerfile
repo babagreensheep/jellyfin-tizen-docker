@@ -17,7 +17,6 @@ RUN useradd -m jellyfin -s /bin/bash
 
 # Copy tizen-studio executable
 USER jellyfin
-# COPY ./web-cli_Tizen_Studio_4.6_ubuntu-64.bin /home/jellyfin
 RUN wget https://download.tizen.org/sdk/Installer/tizen-studio_4.6/web-cli_Tizen_Studio_4.6_ubuntu-64.bin -P /home/jellyfin
 
 # Execute tizen-studio executable
@@ -53,6 +52,11 @@ RUN git clone https://github.com/jellyfin/jellyfin-web.git /home/jellyfin/jellyf
 RUN git clone https://github.com/jellyfin/jellyfin-tizen.git /home/jellyfin/jellyfin-tizen
 
 # Build apps
+
+# patch as per https://github.com/jellyfin/jellyfin-tizen/issues/103
+RUN sed -i 's/var t="subtitles-octopus-worker.data/var t="file:\/\/\/opt\/usr\/apps\/AprZAARz4r\/res\/wgt\/www\/libraries\/subtitles-octopus-worker.data/g' /home/jellyfin/jellyfin-web/dist/libraries/subtitles-octopus-worker.js 
+RUN sed -i 's/var t="subtitles-octopus-worker-legacy.data/var t="file:\/\/\/opt\/usr\/apps\/AprZAARz4r\/res\/wgt\/www\/libraries\/subtitles-octopus-worker-legacy.data/g' /home/jellyfin/jellyfin-web/dist/libraries/subtitles-octopus-worker-legacy.js 
+
 WORKDIR /home/jellyfin/jellyfin-web
 RUN npm ci --no-audit
 WORKDIR /home/jellyfin/jellyfin-tizen
