@@ -21,7 +21,7 @@ Credits go to the following:
    - Keep the TV on
 2. Build the application
    ```
-   docker build -t jellyfin .
+   docker build --network host -t jellyfin .
    ```
    If it fails to execute `expect.sh` in the last step, you might need to [download it again from here](https://github.com/babagreensheep/jellyfin-tizen-docker/blob/master/expect.sh) and overwrite the one in the directory from which you're building.
 3. Deploy the application to the TV:
