@@ -52,9 +52,12 @@ RUN sed -i 's/\/home\/jellyfin\/tizen-studio-data\/tools\/certificate-generator\
 RUN git clone https://github.com/jellyfin/jellyfin-web.git /home/jellyfin/jellyfin-web
 RUN git clone https://github.com/jellyfin/jellyfin-tizen.git /home/jellyfin/jellyfin-tizen
 
-# Build apps
+# Build Jellyfin Web
 WORKDIR /home/jellyfin/jellyfin-web
 RUN npm ci --no-audit
+RUN npm run build:production
+
+# Build Jellyfin Tizen
 WORKDIR /home/jellyfin/jellyfin-tizen
 ENV JELLYFIN_WEB_DIR=/home/jellyfin/jellyfin-web/dist
 RUN npm ci --no-audit
