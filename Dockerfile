@@ -8,9 +8,8 @@ RUN apt-get install -y curl
 RUN apt-get -y install expect
 
 # install node JS & update
-RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get install -y nodejs
-RUN npm update
 
 # Create user to install tizen-studio
 RUN useradd -m jellyfin -s /bin/bash
