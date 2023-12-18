@@ -24,6 +24,13 @@ Credits go to the following:
    docker build --network host -t jellyfin .
    ```
    If it fails to execute `expect.sh` in the last step, you might need to [download it again from here](https://github.com/babagreensheep/jellyfin-tizen-docker/blob/master/expect.sh) and overwrite the one in the directory from which you're building.
+
+   > NOTE: If you have an older Samsung TV and getting this error when trying to lunch the app: `TypeError: Failed to construct Headers: No matching constructor > signature.`, you might need an older version of the jellyfin app, that doesn't use the `@remix-run/router` package.
+   > In order to build the older version, provide the `OLD_VERSION` argument:
+   ```
+   docker build --network host --build-arg JELLYFIN_VERSION='release-10.8.z' -t jellyfin .
+   ```
+
 3. Deploy the application to the TV:
    - Run the container with the attached terminal
      ```

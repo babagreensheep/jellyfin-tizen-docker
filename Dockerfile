@@ -6,6 +6,7 @@ RUN apt-get -qq install -y git openssh-server
 RUN apt-get install -y sudo
 RUN apt-get install -y curl
 RUN apt-get -y install expect
+RUN apt-get -y install vim
 
 # install node JS & update
 RUN apt-get install -y npm
@@ -17,11 +18,13 @@ RUN useradd -m jellyfin -s /bin/bash
 # Copy tizen-studio executable
 USER jellyfin
 # COPY ./web-cli_Tizen_Studio_4.6_ubuntu-64.bin /home/jellyfin
-RUN wget https://download.tizen.org/sdk/Installer/tizen-studio_4.6/web-cli_Tizen_Studio_4.6_ubuntu-64.bin -P /home/jellyfin
+
+# download from us server is way faster
+RUN wget https://usa.sdk-dl.tizen.org/web-cli_Tizen_Studio_4.6_usa_ubuntu-64.bin -P /home/jellyfin
 
 # Execute tizen-studio executable
-RUN chmod a+x /home/jellyfin/web-cli_Tizen_Studio_4.6_ubuntu-64.bin
-RUN ./home/jellyfin/web-cli_Tizen_Studio_4.6_ubuntu-64.bin --accept-license /home/jellyfin/tizen-studio
+RUN chmod a+x /home/jellyfin/web-cli_Tizen_Studio_4.6_usa_ubuntu-64.bin
+RUN ./home/jellyfin/web-cli_Tizen_Studio_4.6_usa_ubuntu-64.bin --accept-license /home/jellyfin/tizen-studio
 
 # Add export path
 ENV PATH=${PATH}:/home/jellyfin/tizen-studio/tools/ide/bin:/home/jellyfin/tizen-studio/tools
@@ -33,7 +36,7 @@ RUN tizen \
         -p 1234 \
         -c SG \
         -ct SG \
-        -n Jellyfin \  
+        -n Jellyfin \
         -f Jellyfin
 
 # Load profile
@@ -53,6 +56,7 @@ RUN git clone https://github.com/jellyfin/jellyfin-tizen.git /home/jellyfin/jell
 
 # Build Jellyfin Web
 WORKDIR /home/jellyfin/jellyfin-web
+RUN [ -n $JELLYFIN_VERSION ] && git checkout $JELLYFIN_VERSION
 RUN npm ci --no-audit
 RUN npm run build:production
 
