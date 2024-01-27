@@ -20,7 +20,7 @@ USER jellyfin
 RUN wget https://download.tizen.org/sdk/Installer/tizen-studio_5.5/web-cli_Tizen_Studio_5.5_ubuntu-64.bin -P /home/jellyfin
 
 # Execute tizen-studio executable
-RUN chmod a+x /home/jellyfin/web-cli_Tizen_Studio_4.6_ubuntu-64.bin
+RUN chmod a+x /home/jellyfin/web-cli_Tizen_Studio_5.5_ubuntu-64.bin
 RUN ./home/jellyfin/web-cli_Tizen_Studio_5.5_ubuntu-64.bin --accept-license /home/jellyfin/tizen-studio
 
 # Add export path
