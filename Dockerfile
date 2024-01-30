@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-RUN apt-get update; apt-get -y upgrade; apt-get clean
+RUN apt-get update && apt-get -y upgrade && apt-get clean
 RUN DEBIAN_FRONTEND=noninteractive TZ=Singapore apt-get -y install tzdata
 RUN apt-get -qq install -y git openssh-server
 RUN apt-get install -y sudo
