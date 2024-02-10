@@ -10,7 +10,7 @@ fi
 
 sdb connect ${TV_IP}
 
-DEVICE_ID=$(sdb devices | grep ${TV_IP} | awk '{ print $3}'
+DEVICE_ID=$(sdb devices | grep ${TV_IP} | awk '{ print $3 }')
 
 if [ -z "$DEVICE_ID" ]
 then
