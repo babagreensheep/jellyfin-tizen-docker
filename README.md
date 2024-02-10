@@ -23,6 +23,10 @@ Credits go to the following:
    ```
    docker build -t jellyfin-tizen-installer .
    ```
+   Optionally specify another branch of jellyfin-web to build from:
+   ```
+   docker build --build-arg JELLYFIN_BRANCH=master -t jellyfin-tizen-installer .
+   ```
 3. Deploy the application to the TV:
   - Run the container passing IP of the TV as an environment variable
     ```

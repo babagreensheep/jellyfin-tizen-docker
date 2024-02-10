@@ -4,12 +4,14 @@ FROM node:20 as jellyfin-web
 RUN useradd -m jellyfin -s /bin/bash
 USER jellyfin
 
-RUN git clone https://github.com/jellyfin/jellyfin-web.git /home/jellyfin/jellyfin-web
+ARG JELLYFIN_BRANCH=release-10.8.z
+
+RUN git clone -b ${JELLYFIN_BRANCH} https://github.com/jellyfin/jellyfin-web.git /home/jellyfin/jellyfin-web
 
 WORKDIR /home/jellyfin/jellyfin-web
 
-RUN npm ci --no-audit
-RUN npm run build:production
+RUN SKIP_PREPARE=1 npm ci --no-audit
+RUN USE_SYSTEM_FONTS=1 npm run build:production
 
 # Build jellyfin-tizen
 FROM node:18 as jellyfin-tizen
