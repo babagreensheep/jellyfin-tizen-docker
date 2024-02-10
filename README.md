@@ -1,4 +1,4 @@
-# Jellyfin for Tizen through Docker
+# Jellyfin installer for Tizen OS through Docker
 Made this single container to build and deploy jellyfin to Samsung TVs.
 
 ## Credits
@@ -12,33 +12,27 @@ Credits go to the following:
 
 ## How to use
 1. Enable developer mode on the TV (adapted from [official tizen guide](https://developer.samsung.com/tv/develop/getting-started/using-sdk/tv-device)):
-   - Turn on the TV
-   - Go to the apps page
-   - Press `12345` on the remote
-   - Enable `Developer mode` in the dialog that pops up, and write the IP of the host running docker
-   - Shut down and restart the TV as instructed by the information screen, re-enter the apps page
-   - There should be (or could be, depending on the model) a big red text in the top bar saying `Developer mode`
-   - Keep the TV on
+  - Turn on the TV
+  - Go to the apps page
+  - Press `12345` on the remote
+  - Enable `Developer mode` in the dialog that pops up, and write the IP of the host running docker
+  - Shut down and restart the TV as instructed by the information screen, re-enter the apps page
+  - There should be (or could be, depending on the model) a big red text in the top bar saying `Developer mode`
+  - Keep the TV on
 2. Build the application
    ```
-   docker build --network host -t jellyfin .
+   docker build -t jellyfin-tizen-installer .
    ```
-   If it fails to execute `expect.sh` in the last step, you might need to [download it again from here](https://github.com/babagreensheep/jellyfin-tizen-docker/blob/master/expect.sh) and overwrite the one in the directory from which you're building.
+   Optionally specify another branch of jellyfin-web to build from:
+   ```
+   docker build --build-arg JELLYFIN_BRANCH=master -t jellyfin-tizen-installer .
+   ```
 3. Deploy the application to the TV:
-   - Run the container with the attached terminal
-     ```
-     docker run -it --rm jellyfin
-     ```
-   - Connect to TV with Device Manager from Tizen Studio. Or with sdb.
-     ```sh
-     sdb connect YOUR_TV_IP
-     ```
-   - Find your device ID using:
-     ```
-     sdb devices
-     ```
-     The device ID will be the last column, something like `UE65NU7400`.
-   - Install package
-     ```sh
-     tizen install -n Jellyfin.wgt -t DEVICE_ID
-     ```
+  - Run the container passing IP of the TV as an environment variable
+    ```
+    docker run --rm --env TV_IP=<your.tv.ip> jellyfin-tizen-installer
+    ```
+  - OR run the container overwriting the entrypoint for more control over the installation
+    ```
+    docker run -it --rm --entrypoint "/bin/bash" jellyfin-tizen-installer
+    ``` 
