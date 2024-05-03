@@ -1,3 +1,6 @@
+# Maintainers
+Looking for maintainers to take over!! 
+
 # Jellyfin installer for Tizen OS through Docker
 Made this single container to build and deploy jellyfin to Samsung TVs.
 
