@@ -11,7 +11,7 @@ Credits go to the following:
 
 ## Prequisites
 - Docker
-- Internet connection for the Docker containers
+- Internet connection for the Docker images
 
 ## How to use
 

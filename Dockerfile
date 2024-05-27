@@ -1,13 +1,7 @@
 # Build jellyfin-web
 FROM node:20 as jellyfin-web
 
-ARG JELLYFIN_BRANCH=release-10.8.z
-# RUN apt-get update && apt-get -y upgrade && apt-get clean
-# RUN DEBIAN_FRONTEND=noninteractive TZ=Singapore apt-get -y install tzdata
-# RUN apt-get -qq install -y git openssh-server
-# RUN apt-get install -y sudo
-# RUN apt-get install -y curl
-# RUN apt-get -y install expect
+ARG JELLYFIN_BRANCH
 
 RUN git clone -b ${JELLYFIN_BRANCH} https://github.com/jellyfin/jellyfin-web.git /home/jellyfin/jellyfin-web
 
