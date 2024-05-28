@@ -38,7 +38,10 @@ TV_IP=192.168.0.10 ./install-jellyfin.sh
 
 ### Jellyfin - the custom way
 
-1. (Optional) Create your custom tizen certificate (see details below).
+1. Create your custom tizen certificate. In order to change certificate details you may edit the .env.default file.
+    ```
+    ./scripts/extract-cert.sh
+    ```
 
 2. Build the image providing required build arguments.
    ```
@@ -59,13 +62,13 @@ TV_IP=192.168.0.10 ./install-jellyfin.sh
     docker run -it --rm --entrypoint "/bin/bash" jellyfin-tizen-installer
     ``` 
 
-### Cert
+### Certificate
 
-Repository includes dummy certificate to allow reinstalling the app without removing it first.
-You may use the provided one or generate your own. Here's how:
+To allow reinstalling the app without removing it first you need to reuse the Tizen certificate.
+You may generate your own by running:
 
 ```
-./extract-cert.sh
+./scripts/extract-cert.sh
 ```
 
 *Note:* you may overwrite default certificate data by amending values in `.env.default`.
