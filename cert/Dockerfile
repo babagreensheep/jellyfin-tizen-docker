@@ -15,11 +15,11 @@ RUN chmod a+x /home/jellyfin/web-cli_Tizen_Studio_5.5_ubuntu-64.bin
 RUN ./home/jellyfin/web-cli_Tizen_Studio_5.5_ubuntu-64.bin --accept-license /home/jellyfin/tizen-studio
 ENV PATH=${PATH}:/home/jellyfin/tizen-studio/tools/ide/bin:/home/jellyfin/tizen-studio/tools
 
-ENV CERT_ALIAS="Jellyfin"
-ENV CERT_PASSWORD="1234"
-ENV CERT_COUNTRY="PL"
-ENV CERT_NAME="Jellyfin"
-ENV CERT_FILENAME="Jellyfin"
+ARG CERT_ALIAS
+ARG CERT_PASSWORD
+ARG CERT_COUNTRY
+ARG CERT_NAME
+ARG CERT_FILENAME
 
 # Create certificates
 RUN tizen certificate \
