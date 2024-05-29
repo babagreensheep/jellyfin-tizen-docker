@@ -1,13 +1,7 @@
 # Build jellyfin-web
 FROM node:20 as jellyfin-web
 
-ARG JELLYFIN_BRANCH=release-10.8.z
-RUN apt-get update && apt-get -y upgrade && apt-get clean
-RUN DEBIAN_FRONTEND=noninteractive TZ=Singapore apt-get -y install tzdata
-RUN apt-get -qq install -y git openssh-server
-RUN apt-get install -y sudo
-RUN apt-get install -y curl
-RUN apt-get -y install expect
+ARG JELLYFIN_BRANCH
 
 RUN git clone -b ${JELLYFIN_BRANCH} https://github.com/jellyfin/jellyfin-web.git /home/jellyfin/jellyfin-web
 
@@ -58,11 +52,15 @@ COPY --from=jellyfin-tizen --chown=jellyfin /home/jellyfin/jellyfin-tizen/index.
 COPY --from=jellyfin-tizen --chown=jellyfin /home/jellyfin/jellyfin-tizen/tizen.js ./tizen.js
 COPY --from=jellyfin-tizen --chown=jellyfin /home/jellyfin/jellyfin-tizen/www/ ./www/
 
+ARG CERT_PASSWORD
+ARG CERT_FILENAME
+ARG CERT_NAME
+
 # Create certificates
-RUN tizen certificate -a Jellyfin -p 1234 -c PL -ct PL -n Jellyfin -f Jellyfin
+COPY cert/${CERT_FILENAME}.p12 /home/jellyfin/tizen-studio-data/keystore/author/Jellyfin.p12
 
 # Load profile
-RUN tizen security-profiles add -n Jellyfin -a /home/jellyfin/tizen-studio-data/keystore/author/Jellyfin.p12 -p 1234
+RUN tizen security-profiles add -n ${CERT_NAME} -a /home/jellyfin/tizen-studio-data/keystore/author/Jellyfin.p12 -p ${CERT_PASSWORD}
 
 # Switch passwords
 RUN sed -i 's/\/home\/jellyfin\/tizen-studio-data\/keystore\/author\/Jellyfin.pwd//' /home/jellyfin/tizen-studio-data/profile/profiles.xml
@@ -71,8 +69,8 @@ RUN sed -i 's/\/home\/jellyfin\/tizen-studio-data\/tools\/certificate-generator\
 # Build Tizen App
 RUN tizen build-web
 
-COPY --chown=jellyfin --chmod=744 ./package-app.sh ./package-app.sh
-COPY --chown=jellyfin --chmod=744 ./install-app.sh ./install-app.sh
+COPY --chown=jellyfin --chmod=744 ./scripts/package-app.sh ./package-app.sh
+COPY --chown=jellyfin --chmod=744 ./scripts/install-app.sh ./install-app.sh
 
 RUN ./package-app.sh
 
