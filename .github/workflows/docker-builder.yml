@@ -1,0 +1,56 @@
+name: Jellyfin for Tizen through Docker autobuilder and pusher for GHCR
+
+on:   
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - main
+      
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+  # Run tests for any PRs.
+  pull_request:
+
+env:
+  BASE_IMAGE_NAME: jellyfish-tizen
+  JFTZN: "0.1"
+
+jobs:
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+  push:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to registry
+        # This is where you will update the PAT to GITHUB_TOKEN
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build and push image
+        run: |
+          BASE_IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$BASE_IMAGE_NAME
+          # Change all uppercase to lowercase
+          BASE_IMAGE_ID=$(echo $BASE_IMAGE_ID | tr '[A-Z]' '[a-z]')
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "main" ] && VERSION=latest
+          echo BASE_IMAGE_ID=$BASE_IMAGE_ID
+          echo VERSION=$VERSION
+          docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+          docker buildx create --name builder --driver docker-container --use
+          docker buildx inspect --bootstrap
+          docker buildx build --platform=linux/arm64,linux/amd64 . --file Dockerfile --build-arg JFTZN=$JFTZN --tag $BASE_IMAGE_ID --push --label "runnumber=${GITHUB_RUN_ID}"
